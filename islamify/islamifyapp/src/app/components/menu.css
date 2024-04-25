@@ -1,0 +1,45 @@
+.menu{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+}
+.menubtn{
+    width: 30px;
+    height: 6px;
+    background: white;
+    border-radius: 5px;
+    transition: all .5s ease-in-out;
+    cursor: pointer;
+}
+.menubtn::before,
+.menubtn::after{
+    content: "";
+    position: absolute;
+     width: 50px;
+    height: 6px;
+    background: white;
+    border-radius: 5px;
+    transition: all .5s ease-in-out;
+}
+.menubtn::before{
+    transform: translateY(-16px);
+}
+.menubtn::after{
+    transform: translateY(+16px);
+}
+
+.menu.open .menubtn{
+    transform: translateX(-50px);
+    background: transparent;
+}
+.menu.open .menubtn::before{
+    transform: rotate(45deg) translate(35px, -35px);
+}
+.menu.open .menubtn::after{
+    transform: rotate(-45deg) translate(35px, 35px);
+}
