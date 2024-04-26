@@ -123,3 +123,5 @@ const HadithLoader = ({randomId, handleRandomId}) => {
 };
 
 export default HadithLoader;
+
+
