@@ -5,7 +5,6 @@ import Lottie from "lottie-react";
 import dice from "../assets/dice.json";
 import { MdCommentBank } from "react-icons/md";
 
-
 export const dummyData = [
   {
     quote: "The only way to do great work is to love what you do.",
@@ -96,9 +95,7 @@ export const dummyData = [
   },
 ];
 
-const HadithLoader = ({randomId, handleRandomId}) => {
-
-
+const HadithLoader = ({ randomId, handleRandomId }) => {
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -115,7 +112,9 @@ const HadithLoader = ({randomId, handleRandomId}) => {
         <h1 className=" text-3xl lg:text-7xl">{dummyData[randomId]?.quote}</h1>
         <div className="flex m-1 p-1">
           <MdCommentBank className="mx-2 h-7 w-7" />
-          <h6 className="text-base lg:text-xl italic">{dummyData[randomId]?.author}</h6>
+          <h6 className="text-base lg:text-xl italic">
+            {dummyData[randomId]?.author}
+          </h6>
         </div>
       </div>
     </>
@@ -123,5 +122,3 @@ const HadithLoader = ({randomId, handleRandomId}) => {
 };
 
 export default HadithLoader;
-
-

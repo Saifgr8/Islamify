@@ -5,6 +5,8 @@ import { useEffect, useState, useRef } from "react";
 import { dummyData } from "./components/HadithLoader";
 import Lottie from "lottie-react";
 import loadingIcon from "./assets/loading.json";
+import saveBookToDB from "../../Books/40_Shah_Waliullah_Dehlawi/script";
+import { connectDB } from "./lib/connectionDb";
 
 
   let colors = [
@@ -104,6 +106,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleLoading = handleRandomId();
+  
     return () => clearTimeout(handleLoading);
   }, []);
 
@@ -115,10 +118,10 @@ export default function Home() {
    
   };
   const randColor = colors[colorId]
-  
   return (
     <main className={`flex justify-center items-center h-screen ${randColor}`}>
       <div className="w-full p-8">
+        <button className="z-40" onClick={() => console.log("$$$$$")}>Run Script</button>
         <HadithLoader randomId={randomId} handleRandomId={handleRandomId} />
       </div>
     </main>

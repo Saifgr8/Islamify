@@ -11,7 +11,7 @@ const books = [
   "40 Hadiths of An Nawawi",
   "40 Hadith of Qudsi",
   " 40 Hadith of Shah Waliullah Dehlawi",
-  "Jami At Tirmidi",
+  "Jami Al Tirmidi",
   "Muwatta Malik",
   "Sahih Al Bukhari",
   "Sunan Abu Dawud",
