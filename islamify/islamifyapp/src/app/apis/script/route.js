@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Chapters from "@/app/models/chapters";
 import Books from "@/app/models/books";
+import Hadith from "@/app/models/hadiths";
 import { connectDB } from "@/app/lib/connectionDb";
 import mongoose from "mongoose";
 import book1 from "../../../../Books/40_Shah_Waliullah_Dehlawi/eng-40ShahDehlawi.json";
@@ -29,41 +30,57 @@ export const GET = async () => {
   ];
   try {
     await connectDB();
-    // for(let book of allBooks){
-    //     saveBookToDB(book)
-    // }
+     for(let book of allBooks){
+    saveBookToDB(book);
+     }
     return NextResponse.json("Hello");
   } catch (error) {}
 };
 
-function saveBookToDB(bookData) {
-  const { name, description, sections, section_details } = bookData.metadata;
+async function saveBookToDB(allBook) {
+  try {
+    const { name, description, sections, section_details } = allBook.metadata;
+    const hadiths = allBook.hadiths;
 
-  const book_id = createBook(name, description);
-  console.log("New Book Created - ", book_id);
-  for (const [key, value] of Object.entries(sections)) {
-    console.log(`Key: ${key}, Value: ${value}`);
-    const section_detail = section_details[key];
-    const { hadithnumber_first, hadithnumber_last } = section_detail;
-    const chapter_title = createChapter(
-      book_id,
-      key,
-      value,
-      hadithnumber_first,
-      hadithnumber_last
-    );
-    console.log("Created chapter - ", chapter_title);
+    const book_id = await createBook(name, description);
+    console.log("New Book Created - ", book_id);
+
+    for (const [key, value] of Object.entries(sections)) {
+      console.log(`Key: ${key}, Value: ${value}`);
+      const section_detail = section_details[key];
+      const { hadithnumber_first, hadithnumber_last } = section_detail;
+      const chapterId = await createChapter(
+        book_id,
+        key,
+        value,
+        hadithnumber_first,
+        hadithnumber_last
+      );
+
+      await prepareHadithCreation(chapterId, key, book_id, hadiths);
+    }
+  } catch (error) {
+    console.error("Error saving book to DB:", error);
   }
 }
 
 async function createBook(name, description) {
-  console.log("Creating Book - ", name);
-  const newBook = await Books.create({
-    name: name,
-    description: description,
-  });
-
-  return newBook.id;
+  try {
+    console.log("Creating Book - ", name);
+    const existingBook = await Books.findOne({ name: name });
+    if (existingBook) {
+      return existingBook.id;
+    }
+    const newBook = await Books.create({
+      name: name,
+      description: description,
+    });
+    console.log("New Book Created - ", newBook.id);
+    return newBook.id;
+  } catch (error) {
+    console.error("Error creating book:", error);
+    throw error; // Re-throw the error to propagate it up the call stack
+  }
 }
 
 async function createChapter(
@@ -73,23 +90,94 @@ async function createChapter(
   hadith_start,
   hadith_end
 ) {
-  console.log(book_id);
-  console.log(
-    "Creating chapter number - ",
-    chapter_number,
-    " with title - ",
-    title
-  );
-  const new_book_id = await book_id;
-  console.log(new_book_id);
-  console.log("Hadees start number = ", hadith_start);
-  console.log("Hadees last number= ", hadith_end);
-  const newChapter = await Chapters.create({
-    book_id: new_book_id,
-    chapter_number: chapter_number,
-    title: title,
-    hadith_start: hadith_start,
-    hadith_end: hadith_end,
-  });
-  return newChapter.title;
+  try {
+    console.log("Book ID:", book_id);
+    console.log("Hadith start number:", hadith_start);
+    console.log("Hadith last number:", hadith_end);
+    const newChapter = await Chapters.create({
+      book_id: book_id,
+      chapter_number: chapter_number,
+      title: title,
+      hadith_start: hadith_start,
+      hadith_end: hadith_end,
+    });
+    console.log("New Chapter Created - ", newChapter.id);
+    return newChapter.id;
+  } catch (error) {
+    console.error("Error creating chapter:", error);
+    throw error; // Re-throw the error to propagate it up the call stack
+  }
 }
+
+const prepareHadithCreation = async (
+  chapter_id,
+  chapter_num,
+  book_id,
+  hadiths
+) => {
+  const filteredHadiths = hadiths.filter(
+    (h) => h.reference.book.toString() === chapter_num
+  );
+    const resolved_chapter_id = await chapter_id;
+    const resolved_book_id = await book_id
+  if (filteredHadiths.length > 0) {
+    filteredHadiths.forEach(
+      async (hadith) =>
+        await createHadith(
+          resolved_book_id,
+          hadith.hadithnumber,
+          resolved_chapter_id,
+          hadith.reference.hadith,
+          hadith.text,
+          hadith.grades
+        )
+    );
+  }
+  console.log(filteredHadiths);
+  console.log(
+    "Number of hadees in chapter num - ",
+    chapter_num,
+    " : ",
+    filteredHadiths.length
+  );
+};
+
+const createHadith = async (
+  book_id,
+  bookHadeesNumber,
+  chapter_id,
+  chapterHadithnumber,
+  text,
+  grades
+) => {
+  try {
+    console.log(book_id, bookHadeesNumber, chapter_id, chapterHadithnumber);
+
+    // const resolved_chapter_id = await chapter_id;
+    // const resolved_book_id = await book_id;
+
+    const addedHadith = await Hadith.create({
+      chapter_ref: {
+        chapter_id: chapter_id,
+        chapter_hadith_number: chapterHadithnumber,
+      },
+      book_ref: {
+        book_id: book_id,
+        book_hadith_number: bookHadeesNumber,
+      },
+      text: {
+        english: text,
+        arabic: "",
+      },
+      grades: grades,
+    });
+
+    console.log(
+      "Added Hadith Number:",
+      addedHadith.book_ref.book_hadith_number
+    );
+  } catch (error) {
+    console.error("Error creating Hadith:", error);
+    throw error; // Re-throw the error to propagate it up the call stack
+  }
+};
