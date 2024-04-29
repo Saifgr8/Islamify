@@ -1,36 +1,14 @@
 import { Schema, models } from "mongoose";
 import mongoose from "mongoose";
 
-const ChapterRefSchema = new Schema({
-  chapter_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  chapter_hadith_number: {
-    type: String,
-    required: true,
-  },
-});
-
-const BookRefSchema = new Schema({
-  book_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  book_hadith_number: {
-    type: Number,
-    required: true,
-  },
-});
-
 const hadithSchema = new Schema(
   {
     chapter_ref: {
-      type: ChapterRefSchema,
+      type: Object,
       required: true,
     },
     book_ref: {
-      type: BookRefSchema,
+      type: Object,
       required: true,
     },
     text: {

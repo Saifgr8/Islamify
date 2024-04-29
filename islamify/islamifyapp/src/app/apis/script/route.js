@@ -14,9 +14,26 @@ import book7 from "../../../../Books/Sahih_Muslim/eng-sMuslim.json";
 import book8 from "../../../../Books/Sunan_Abu_Dawud/eng-abuDawood.json";
 import book9 from "../../../../Books/Sunan_an_Nasai/eng-nasai.json";
 import book10 from "../../../../Books/Sunan_Ibn_Majah/eng-ibnMaja.json";
+import book11 from "../../../../Books/40_Shah_Waliullah_Dehlawi/ara-40ShahDehlawi.json";
+import book12 from "../../../../Books/40_an_Nawawi/ara-40Nawai.json";
+import book13 from "../../../../Books/40_Hadith_Qudsi/ara-qudsi.json";
+import book14 from "../../../../Books/Muwatta_Malik/ara-malik.json";
+import book15 from "../../../../Books/Sahih_al_Bukhari/ara-bukhari.json";
+import book16 from "../../../../Books/Sahih_Muslim/ara-sMuslim.json";
+import book17 from "../../../../Books/Sunan_Abu_Dawud/ara-abuDawood.json";
+import book18 from "../../../../Books/Sunan_an_Nasai/ara-nasai.json";
+import book19 from "../../../../Books/Sunan_Ibn_Majah/ara-ibnMaja.json";
+import book20 from "../../../../Books/Jami_At_Tirmidhi/ara-tirmidi.json";
+import book21 from "../../../../Books/Jami_At_Tirmidhi/urdu-tirmidi.json";
+import book22 from "../../../../Books/Muwatta_Malik/urdu-malik.json";
+import book23 from "../../../../Books/Sahih_al_Bukhari/urdu-bukhari.json";
+import book24 from "../../../../Books/Sahih_Muslim/urdu-sMuslim.json";
+import book25 from "../../../../Books/Sunan_Abu_Dawud/urdu-abuDawood.json";
+import book26 from "../../../../Books/Sunan_an_Nasai/urdu-nasai.json";
+import book27 from "../../../../Books/Sunan_Ibn_Majah/urdu-ibnMaja.json";
 
 export const GET = async () => {
-  const allBooks = [
+  const engBooks = [
     book1,
     book2,
     book3,
@@ -28,11 +45,32 @@ export const GET = async () => {
     book9,
     book10,
   ];
+  const arabBooks = [
+    book11,
+    book12,
+    book13,
+    book14,
+    book15,
+    book16,
+    book17,
+    book18,
+    book19,
+    book20,
+  ];
+
+  const urduBooks = [book21, book22, book23, book24, book25, book26, book27];
   try {
     await connectDB();
-     for(let book of allBooks){
-    saveBookToDB(book);
-     }
+    for (let allBook of engBooks) {
+      await saveBookToDB(allBook);
+    }
+    for (let allBook of arabBooks) {
+      await updateTextLangDB(allBook);
+    }
+    for (let allBook of urduBooks) {
+      await updateTextLangUrduDB(allBook);
+    }
+
     return NextResponse.json("Hello");
   } catch (error) {}
 };
@@ -94,6 +132,7 @@ async function createChapter(
     console.log("Book ID:", book_id);
     console.log("Hadith start number:", hadith_start);
     console.log("Hadith last number:", hadith_end);
+
     const newChapter = await Chapters.create({
       book_id: book_id,
       chapter_number: chapter_number,
@@ -118,8 +157,8 @@ const prepareHadithCreation = async (
   const filteredHadiths = hadiths.filter(
     (h) => h.reference.book.toString() === chapter_num
   );
-    const resolved_chapter_id = await chapter_id;
-    const resolved_book_id = await book_id
+  const resolved_chapter_id = await chapter_id;
+  const resolved_book_id = await book_id;
   if (filteredHadiths.length > 0) {
     filteredHadiths.forEach(
       async (hadith) =>
@@ -156,6 +195,17 @@ const createHadith = async (
     // const resolved_chapter_id = await chapter_id;
     // const resolved_book_id = await book_id;
 
+    const existingHadith = await Hadith.findOne({
+      "chapter_ref.chapter_id": chapter_id,
+      "book_ref.book_id": book_id,
+    });
+
+    if (existingHadith) {
+      await Chapters.updateOne({
+        "text.arabic": text,
+      });
+    }
+
     const addedHadith = await Hadith.create({
       chapter_ref: {
         chapter_id: chapter_id,
@@ -168,6 +218,7 @@ const createHadith = async (
       text: {
         english: text,
         arabic: "",
+        urdu: "",
       },
       grades: grades,
     });
@@ -179,5 +230,75 @@ const createHadith = async (
   } catch (error) {
     console.error("Error creating Hadith:", error);
     throw error; // Re-throw the error to propagate it up the call stack
+  }
+};
+
+const updateTextLangDB = async (book) => {
+  try {
+    const { name } = book.metadata;
+    console.log("book name is: " + name);
+    let foundBook = await Books.findOne({ name: name }); //bookid
+    console.log(foundBook);
+    const bookId = foundBook.id;
+    console.log("Book id: " + bookId);
+
+    const hadiths = book.hadiths;
+    for (let indHadith of hadiths) {
+      const { hadithnumber, reference } = indHadith; //overall hadith
+      console.log(hadithnumber);
+      const query = {
+        "book_ref.book_id": bookId,
+        "book_ref.book_hadith_number": hadithnumber,
+      };
+
+      const existingHadith = await Hadith.findOne(query);
+
+      if (!existingHadith) {
+        console.log("Could not find existing hadith");
+      }
+      console.log(indHadith?.text);
+      existingHadith.text.arabic = indHadith?.text;
+      existingHadith.markModified("text");
+      const updatedHadith = await existingHadith.save();
+
+      console.log("Updated text for " + updatedHadith);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateTextLangUrduDB = async (book) => {
+  try {
+    const { name } = book.metadata;
+    console.log("book name is: " + name);
+    let foundBook = await Books.findOne({ name: name }); //bookid
+    console.log(foundBook);
+    const bookId = foundBook.id;
+    console.log("Book id: " + bookId);
+
+    const hadiths = book.hadiths;
+    for (let indHadith of hadiths) {
+      const { hadithnumber, reference } = indHadith; //overall hadith
+      console.log(hadithnumber);
+      const query = {
+        "book_ref.book_id": bookId,
+        "book_ref.book_hadith_number": hadithnumber,
+      };
+
+      const existingHadith = await Hadith.findOne(query);
+
+      if (!existingHadith) {
+        console.log("Could not find existing hadith");
+      }
+      console.log(indHadith?.text);
+      existingHadith.text.urdu = indHadith?.text;
+      existingHadith.markModified("text");
+      const updatedHadith = await existingHadith.save();
+
+      console.log("Updated text for " + updatedHadith);
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
