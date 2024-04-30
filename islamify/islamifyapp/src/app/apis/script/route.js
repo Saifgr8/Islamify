@@ -81,10 +81,10 @@ async function saveBookToDB(allBook) {
     const hadiths = allBook.hadiths;
 
     const book_id = await createBook(name, description);
-    console.log("New Book Created - ", book_id);
+    //console.log("New Book Created - ", book_id);
 
     for (const [key, value] of Object.entries(sections)) {
-      console.log(`Key: ${key}, Value: ${value}`);
+      //console.log(`Key: ${key}, Value: ${value}`);
       const section_detail = section_details[key];
       const { hadithnumber_first, hadithnumber_last } = section_detail;
       const chapterId = await createChapter(
@@ -104,7 +104,7 @@ async function saveBookToDB(allBook) {
 
 async function createBook(name, description) {
   try {
-    console.log("Creating Book - ", name);
+    //console.log("Creating Book - ", name);
     const existingBook = await Books.findOne({ name: name });
     if (existingBook) {
       return existingBook.id;
@@ -113,7 +113,7 @@ async function createBook(name, description) {
       name: name,
       description: description,
     });
-    console.log("New Book Created - ", newBook.id);
+    //console.log("New Book Created - ", newBook.id);
     return newBook.id;
   } catch (error) {
     console.error("Error creating book:", error);
@@ -129,9 +129,9 @@ async function createChapter(
   hadith_end
 ) {
   try {
-    console.log("Book ID:", book_id);
-    console.log("Hadith start number:", hadith_start);
-    console.log("Hadith last number:", hadith_end);
+    //console.log("Book ID:", book_id);
+    //console.log("Hadith start number:", hadith_start);
+    //console.log("Hadith last number:", hadith_end);
 
     const newChapter = await Chapters.create({
       book_id: book_id,
@@ -140,7 +140,7 @@ async function createChapter(
       hadith_start: hadith_start,
       hadith_end: hadith_end,
     });
-    console.log("New Chapter Created - ", newChapter.id);
+    //console.log("New Chapter Created - ", newChapter.id);
     return newChapter.id;
   } catch (error) {
     console.error("Error creating chapter:", error);
@@ -172,7 +172,7 @@ const prepareHadithCreation = async (
         )
     );
   }
-  console.log(filteredHadiths);
+  //console.log(filteredHadiths);
   console.log(
     "Number of hadees in chapter num - ",
     chapter_num,
@@ -236,16 +236,16 @@ const createHadith = async (
 const updateTextLangDB = async (book) => {
   try {
     const { name } = book.metadata;
-    console.log("book name is: " + name);
+    //console.log("book name is: " + name);
     let foundBook = await Books.findOne({ name: name }); //bookid
-    console.log(foundBook);
+    //console.log(foundBook);
     const bookId = foundBook.id;
-    console.log("Book id: " + bookId);
+    //console.log("Book id: " + bookId);
 
     const hadiths = book.hadiths;
     for (let indHadith of hadiths) {
       const { hadithnumber, reference } = indHadith; //overall hadith
-      console.log(hadithnumber);
+      //console.log(hadithnumber);
       const query = {
         "book_ref.book_id": bookId,
         "book_ref.book_hadith_number": hadithnumber,
@@ -256,7 +256,7 @@ const updateTextLangDB = async (book) => {
       if (!existingHadith) {
         console.log("Could not find existing hadith");
       }
-      console.log(indHadith?.text);
+      //console.log(indHadith?.text);
       existingHadith.text.arabic = indHadith?.text;
       existingHadith.markModified("text");
       const updatedHadith = await existingHadith.save();
@@ -271,16 +271,16 @@ const updateTextLangDB = async (book) => {
 const updateTextLangUrduDB = async (book) => {
   try {
     const { name } = book.metadata;
-    console.log("book name is: " + name);
+    //console.log("book name is: " + name);
     let foundBook = await Books.findOne({ name: name }); //bookid
-    console.log(foundBook);
+    //console.log(foundBook);
     const bookId = foundBook.id;
-    console.log("Book id: " + bookId);
+    //console.log("Book id: " + bookId);
 
     const hadiths = book.hadiths;
     for (let indHadith of hadiths) {
       const { hadithnumber, reference } = indHadith; //overall hadith
-      console.log(hadithnumber);
+      //console.log(hadithnumber);
       const query = {
         "book_ref.book_id": bookId,
         "book_ref.book_hadith_number": hadithnumber,

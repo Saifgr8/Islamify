@@ -54,7 +54,7 @@ const Navbar = () => {
               onClick={handleHadithOpen}
             >
               <div className="flex justify-between">
-                Hadith
+                Hadith Books
                 {(showHadithBooks && <SlArrowDown className="mt-1" />) || (
                   <SlArrowRight className="mt-1" />
                 )}

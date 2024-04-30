@@ -2,11 +2,6 @@
 import Image from "next/image";
 import HadithLoader from "./components/HadithLoader";
 import { useEffect, useState, useRef } from "react";
-import { dummyData } from "./components/HadithLoader";
-import Lottie from "lottie-react";
-import loadingIcon from "./assets/loading.json";
-import saveBookToDB from "../../Books/40_Shah_Waliullah_Dehlawi/script";
-import { connectDB } from "./lib/connectionDb";
 
 let colors = [
   `bg-gray-300`,
@@ -53,75 +48,64 @@ let colors = [
   "bg-violet-400",
   "bg-fuchsia-400",
   "bg-rose-400",
-  "bg-gray-500",
-  "bg-red-500",
-  "bg-green-500",
-  "bg-blue-500",
-  "bg-indigo-500",
-  "bg-purple-500",
-  "bg-pink-500",
-  "bg-white-500",
-  "bg-slate-500",
-  "bg-zinc-500",
-  "bg-neutral-500",
-  "bg-stone-500",
-  "bg-orange-500",
-  "bg-amber-500",
-  "bg-lime-500",
-  "bg-emerald-500",
-  "bg-teal-500",
-  "bg-cyan-500",
-  "bg-sky-500",
-  "bg-violet-500",
-  "bg-fuchsia-500",
-  "bg-rose-500",
-  "bg-gray-600",
-  "bg-red-600",
-  "bg-green-600",
-  "bg-blue-600",
-  "bg-indigo-600",
-  "bg-purple-600",
-  "bg-pink-600",
-  "bg-white-600",
-  "bg-slate-600",
-  "bg-zinc-600",
-  "bg-neutral-600",
-  "bg-stone-600",
-  "bg-orange-600",
-  "bg-amber-600",
-  "bg-lime-600",
-  "bg-emerald-600",
-  "bg-teal-600",
-  "bg-cyan-600",
-  "bg-sky-600",
-  "bg-violet-600",
-  "bg-fuchsia-600",
-  "bg-rose-600",
+  "bg-gray-200",
+  "bg-red-200",
+  "bg-green-200",
+  "bg-blue-200",
+  "bg-indigo-200",
+  "bg-purple-200",
+  "bg-pink-200",
+  "bg-white-200",
+  "bg-slate-200",
+  "bg-zinc-200",
+  "bg-neutral-200",
+  "bg-stone-200",
+  "bg-orange-200",
+  "bg-amber-200",
+  "bg-lime-200",
+  "bg-emerald-200",
+  "bg-teal-200",
+  "bg-cyan-200",
+  "bg-sky-200",
+  "bg-violet-200",
+  "bg-fuchsia-200",
+  "bg-rose-200",
 ];
 
 export default function Home() {
-  const [randomId, setRandomId] = useState(0);
-  const [colorId, setColorId] = useState(0);
+  const [data, setData] = useState([]);
+  const [index, setIndex] = useState(0)
+  const [colorIndex, setColorIndex] = useState(0)
 
   useEffect(() => {
-    const handleLoading = handleRandomId();
-
-    return () => clearTimeout(handleLoading);
+    randomIndex();
+    getRandomHadith();
   }, []);
-  const handleRandomId = () => {
-    const random = Math.floor(Math.random() * dummyData.length);
-    const colorRandom = Math.floor(Math.random() * colors.length);
-    setRandomId(random);
-    setColorId(colorRandom);
+
+  const randomIndex = () => {
+    const index = Math.floor(Math.random() * 1001)
+    const randColorIndex = Math.floor(Math.random() * colors.length)
+    setIndex(index)
+    setColorIndex(randColorIndex);
+  }
+
+  const getRandomHadith = async () => {
+    try {
+      const res = await fetch("../apis/hadith");
+      if (!res.ok) {
+        console.log("Error fetching hadith");
+      }
+      const data = await res.json();
+      setData(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const randColor = colors[colorId];
+  const bgColor = colors[colorIndex]
   return (
-    <main className={`flex justify-center items-center h-screen ${randColor}`}>
+    <main className={`flex justify-center items-center h-screen ${bgColor} `}>
       <div className="w-full p-8">
-        <button className="z-40" onClick={() => console.log("$$$$$")}>
-          Run Script
-        </button>
-        <HadithLoader randomId={randomId} handleRandomId={handleRandomId} />
+        <HadithLoader data={data} index={index} randIndex = {randomIndex}/>
       </div>
     </main>
   );

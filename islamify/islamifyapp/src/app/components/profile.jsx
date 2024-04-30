@@ -5,34 +5,21 @@ import { useState } from "react";
 const Profile = () => {
   const [bookId, setBookId] = useState("");
   const [chapterNumber, setChapterNumber] = useState("");
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("");
   const [hadithStart, setHadithStart] = useState("");
-  const [hadithEnd, setHadithEnd] = useState("")
+  const [hadithEnd, setHadithEnd] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!chapterNumber || !bookId) {
-      console.error("Missing value");
-      return;
-    }
     try {
-      const res = await fetch("../apis/chapters", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ bookId, chapterNumber, title, hadithStart, hadithEnd }),
-      });
-      
-      if (res.ok) {
-        console.log("connection successfull");
-        const form = e.target;
-        form.reset()
-      } else {
-         console.error("Failed to add book:", res.statusText);
+      const res = await fetch("../apis/books");
+      if (!res.ok) {
+        console.log("Error getting data");
       }
+      const data = await res.json();
+      console.log(data);
     } catch (error) {
-      console.log("Error client side");
+      console.log(error);
     }
   };
 
