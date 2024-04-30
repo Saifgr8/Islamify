@@ -74,7 +74,6 @@ let colors = [
 
 export default function Home() {
   const [data, setData] = useState([]);
-  const [index, setIndex] = useState(0)
   const [colorIndex, setColorIndex] = useState(0)
 
   useEffect(() => {
@@ -83,15 +82,14 @@ export default function Home() {
   }, []);
 
   const randomIndex = () => {
-    const index = Math.floor(Math.random() * 1001)
     const randColorIndex = Math.floor(Math.random() * colors.length)
-    setIndex(index)
     setColorIndex(randColorIndex);
   }
 
   const getRandomHadith = async () => {
     try {
       const res = await fetch("../apis/hadith");
+      //console.log(res)
       if (!res.ok) {
         console.log("Error fetching hadith");
       }
@@ -105,7 +103,7 @@ export default function Home() {
   return (
     <main className={`flex justify-center items-center h-screen ${bgColor} `}>
       <div className="w-full p-8">
-        <HadithLoader data={data} index={index} randIndex = {randomIndex}/>
+        <HadithLoader data={data} randomHadith={getRandomHadith} />
       </div>
     </main>
   );

@@ -5,8 +5,8 @@ import Lottie from "lottie-react";
 import { MdCommentBank } from "react-icons/md";
 import loadingIcon from "../assets/reload.json";
 
-const HadithLoader = ({ data, index, randIndex }) => {
-  console.log(data)
+const HadithLoader = ({ data, randomHadith }) => {
+  console.log(data);
   // useEffect(() => {
   //   if (data[index]?.text) {
   //     ref?.current?.pause();
@@ -14,14 +14,12 @@ const HadithLoader = ({ data, index, randIndex }) => {
   // }, [data]);
 
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-  const ref = useRef();
-  console.log(index)
+
   return (
     <>
       <div className="flex flex-col gap-3">
-        <div onClick={randIndex} className="flex justify-end cursor-pointer">
+        <div onClick={randomHadith} className="flex justify-end cursor-pointer">
           <Lottie
-            lottieRef={ref}
             autoplay={true}
             loop={true}
             className=" h-32 lg:h-60 absolute top-20 lg:top-0 right-0 m-2 p-2 cursor-pointer"
@@ -73,20 +71,20 @@ const HadithLoader = ({ data, index, randIndex }) => {
             </div>
           </div>
         </div>
-        {data[index]?.text ? (
+        {data?.text ? (
           <div>
             <h1 className="text-xl lg:text-3xl italic text-center">
-              Book: {data[index]?.foundBook_name}
+              Book: {data?.foundBook_name}
               <span className="text-sm lg:text-lg px-2">
-                [{data[index]?.book_ref?.book_hadith_number}]
+                [{data?.book_ref?.book_hadith_number}]
               </span>
             </h1>
             {selectedLanguage === "English" ? (
               <div className="overflow-auto h-80">
-                <h1 className=" text-3xl lg:text-5xl text-center py-8">
-                  {data[index]?.text?.english ? (
-                    data[index]?.text?.english
-                  ) : data[index]?.text?.english === "" ? (
+                <h1 className=" text-3xl lg:text-5xl  py-8 text-justify">
+                  {data?.text?.english ? (
+                    data?.text?.english
+                  ) : data?.text?.english === "" ? (
                     <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-red-700">
                       Translation unavailable, please look other languages.
                     </span>
@@ -98,9 +96,9 @@ const HadithLoader = ({ data, index, randIndex }) => {
             ) : selectedLanguage === "Arabic" ? (
               <div className="overflow-auto h-80">
                 <h1 className=" text-3xl lg:text-5xl text-center py-8">
-                  {data[index]?.text?.arabic ? (
-                    data[index]?.text?.arabic
-                  ) : data[index]?.text?.arabic === "" ? (
+                  {data?.text?.arabic ? (
+                    data?.text?.arabic
+                  ) : data?.text?.arabic === "" ? (
                     <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-red-700">
                       الترجمة غير متوفرة، يرجى البحث في لغات أخرى
                     </span>
@@ -112,9 +110,9 @@ const HadithLoader = ({ data, index, randIndex }) => {
             ) : selectedLanguage === "Urdu" ? (
               <div className="overflow-auto h-80">
                 <h1 className=" text-3xl lg:text-5xl text-center py-8">
-                  {data[index]?.text?.urdu ? (
-                    data[index]?.text?.urdu
-                  ) : data[index]?.text?.urdu === "" ? (
+                  {data?.text?.urdu ? (
+                    data?.text?.urdu
+                  ) : data?.text?.urdu === "" ? (
                     <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-red-700">
                       ترجمہ دستیاب نہیں ہے، براہ کرم دیگر زبانیں دیکھیں۔
                     </span>
@@ -127,11 +125,11 @@ const HadithLoader = ({ data, index, randIndex }) => {
             <div className="flex justify-center lg:mr-36">
               <MdCommentBank className="mx-2 h-7 w-7" />
               <h6 className="text-base lg:text-xl italic px-2 text-center">
-                ({data[index]?.foundChapter_number})
+                ({data?.foundChapter_number})
               </h6>
               <h6 className="text-base lg:text-xl italic text-center">
-                {data[index]?.foundChapter_name} -{" "}
-                {data[index]?.chapter_ref?.chapter_hadith_number}
+                {data?.foundChapter_name} -{" "}
+                {data?.chapter_ref?.chapter_hadith_number}
               </h6>
             </div>
           </div>
