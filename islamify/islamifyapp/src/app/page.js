@@ -26,28 +26,6 @@ let colors = [
   "bg-violet-300",
   "bg-fuchsia-300",
   "bg-rose-300",
-  "bg-gray-400",
-  "bg-red-400",
-  "bg-green-400",
-  "bg-blue-400",
-  "bg-indigo-400",
-  "bg-purple-400",
-  "bg-pink-400",
-  "bg-white-400",
-  "bg-slate-400",
-  "bg-zinc-400",
-  "bg-neutral-400",
-  "bg-stone-400",
-  "bg-orange-400",
-  "bg-amber-400",
-  "bg-lime-400",
-  "bg-emerald-400",
-  "bg-teal-400",
-  "bg-cyan-400",
-  "bg-sky-400",
-  "bg-violet-400",
-  "bg-fuchsia-400",
-  "bg-rose-400",
   "bg-gray-200",
   "bg-red-200",
   "bg-green-200",
@@ -74,17 +52,16 @@ let colors = [
 
 export default function Home() {
   const [data, setData] = useState([]);
-  const [colorIndex, setColorIndex] = useState(0)
+  const [colorIndex, setColorIndex] = useState(0);
 
   useEffect(() => {
-    randomIndex();
     getRandomHadith();
   }, []);
 
   const randomIndex = () => {
-    const randColorIndex = Math.floor(Math.random() * colors.length)
+    const randColorIndex = Math.floor(Math.random() * colors.length);
     setColorIndex(randColorIndex);
-  }
+  };
 
   const getRandomHadith = async () => {
     try {
@@ -94,14 +71,16 @@ export default function Home() {
         console.log("Error fetching hadith");
       }
       const data = await res.json();
+
       setData(data);
+      randomIndex();
     } catch (error) {
       console.log(error);
     }
   };
-  const bgColor = colors[colorIndex]
+  const bgColor = colors[colorIndex];
   return (
-    <main className={`flex justify-center items-center h-screen ${bgColor} `}>
+    <main className={`flex justify-center items-center h-screen bg-slate-900 `}>
       <div className="w-full p-8">
         <HadithLoader data={data} randomHadith={getRandomHadith} />
       </div>

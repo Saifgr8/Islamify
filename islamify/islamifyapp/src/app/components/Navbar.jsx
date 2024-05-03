@@ -22,14 +22,14 @@ const books = [
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showHadithBooks, setShowHadithBooks] = useState(false);
-  const handleHadithOpen = () => {
-    setShowHadithBooks(!showHadithBooks);
-  };
-  
+ 
+
   return (
     <div
       className={`transition-colors duration-1000 h-screen ${
-        menuOpen ? "bg-green-300 w-full" : "bg-inherit"
+        menuOpen
+          ? "bg-gradient-to-br from-slate-900 via-slate-700 to-slate-600 w-full"
+          : "bg-inherit"
       }`}
     >
       <BurgerMenu
@@ -41,48 +41,26 @@ const Navbar = () => {
         <div className="m-2 p-2">
           <ol className="list-disc">
             <Link href="/">
-              <li
-                className="cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-green-700 rounded-lg"
-              >
+              <li className="cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-gradient-to-r from-slate-700 via-amber-500 to-amber-400 rounded-lg">
                 Home
               </li>
             </Link>
             <li
-              className={`cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-green-700 rounded-lg ${
-                  showHadithBooks ? "bg-green-700" : "bg-inherit"
-                }`}
-              onClick={handleHadithOpen}
+              className={`cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-gradient-to-r from-slate-700 via-amber-500 to-amber-400 rounded-lg`}
             >
-              <div className="flex justify-between">
-                Hadith Books
-                {(showHadithBooks && <SlArrowDown className="mt-1" />) || (
-                  <SlArrowRight className="mt-1" />
-                )}
-              </div>
-              {showHadithBooks && (
-                <ol className="m-2 p-2  list-decimal">
-                  {books.map((item) => {
-                    return (
-                      <Link href={`/pages/${item}`}>
-                        <li key={books.indexOf(item)} className="m-2 py-1 px-2 lg:text-lg text-xs font-bold"> 
-                          {item}
-                        </li>
-                      </Link>
-                    );
-                  })}
-                </ol>
-              )}
+              Hadith Books
+              <div className=" mx-2 badge badge-ghost">Soon</div>
             </li>
 
-            <li className="cursor-pointer m-2 p-2 text-white font-semibold  text-lg hover:bg-green-700 rounded-lg ">
+            <li className="cursor-pointer m-2 p-2 text-white font-semibold  text-lg hover:bg-gradient-to-r from-slate-700 via-amber-500 to-amber-400 rounded-lg ">
               Quran
+              <div className=" mx-2 badge badge-ghost">Soon</div>
             </li>
-            <li className="cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-green-700 rounded-lg">
-              About us
+            <li className="cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-gradient-to-r from-slate-700 via-amber-500 to-amber-400 rounded-lg">
+              Zakat Calculator
+              <div className=" mx-2 badge badge-ghost">Soon</div>
             </li>
-            <li className="cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-green-700 rounded-lg">
-              Support
-            </li>
+            
           </ol>
         </div>
       )}

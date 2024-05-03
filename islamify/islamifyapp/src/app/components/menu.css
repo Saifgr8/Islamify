@@ -11,7 +11,7 @@
 .menubtn{
     width: 30px;
     height: 6px;
-    background: white;
+    background: #ca8a04;
     border-radius: 5px;
     transition: all .5s ease-in-out;
     cursor: pointer;
@@ -22,7 +22,7 @@
     position: absolute;
      width: 50px;
     height: 6px;
-    background: white;
+    background: #ca8a04;
     border-radius: 5px;
     transition: all .5s ease-in-out;
 }
@@ -38,8 +38,10 @@
     background: transparent;
 }
 .menu.open .menubtn::before{
+    background-color: white;
     transform: rotate(45deg) translate(35px, -35px);
 }
 .menu.open .menubtn::after{
+    background-color: white;
     transform: rotate(-45deg) translate(35px, 35px);
 }

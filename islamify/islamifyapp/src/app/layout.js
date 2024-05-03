@@ -16,11 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="relative flex">
-          <div className=" w-fit lg:w-1/5 z-10 absolute left-0">
+        <div className="">
+          <div className=" lg:w-1/5 absolute left-0 z-10">
             <Navbar />
           </div>
-          <div className="w-full">{children}</div>
+          <div className="">{children}</div>
         </div>
       </body>
     </html>
