@@ -16,8 +16,8 @@ const HadithLoader = ({ data, randomHadith }) => {
 
   useEffect(() => {
     const time = setTimeout(() => {
-      ref.current.pause();
-    }, 1500);
+      ref?.current?.pause();
+    }, 1600);
     return () => clearTimeout(time);
   }, [data]);
 
@@ -32,7 +32,7 @@ const HadithLoader = ({ data, randomHadith }) => {
 
   const languageSelection = () => {
     return (
-      <div className="flex flex-row justify-center items-center">
+      <div className="flex  justify-center items-center">
         <div className="mx-2">
           <input
             onChange={() => setSelectedLanguage("Arabic")}
@@ -72,7 +72,7 @@ const HadithLoader = ({ data, randomHadith }) => {
 
   const gradeSection = () => {
     return (
-      <div className="m-4 z-50">
+      <div className="m-4">
         {gradesData?.length > 0 ? (
           <div className="mx-2">
             <span
@@ -178,7 +178,7 @@ const HadithLoader = ({ data, randomHadith }) => {
             )}
           </div>
         ) : (
-          <span>No grades available</span>
+          <span className="m-2 p-2">No grades available for this Hadith</span>
         )}
       </div>
     );
@@ -189,7 +189,7 @@ const HadithLoader = ({ data, randomHadith }) => {
       <div className=" flex rounded-3xl shadow-xl shadow-amber-500 bg-gradient-to-b from-slate-800 via-slate-700 to-slate-600 text-white w-full">
         <div className="w-1/4">{gradeSection()}</div>
         <div className=" flex flex-col items-center justify-center w-3/4">
-          <div className="flex justify-evenly items-center">
+          <div className="flex justify-start items-center">
             <Lottie
               loop={false}
               autoPlay={false}
@@ -204,7 +204,7 @@ const HadithLoader = ({ data, randomHadith }) => {
               [{data?.book_ref?.book_hadith_number}]
             </span>
             {selectedLanguage === "English" ? (
-              <div className="ml-32">
+              <div className="absolute right-10">
                 <button
                   onClick={randomHadith}
                   className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer text-xl hover:text-2xl"
@@ -213,7 +213,7 @@ const HadithLoader = ({ data, randomHadith }) => {
                 </button>
               </div>
             ) : selectedLanguage === "Arabic" ? (
-              <div className="ml-32">
+              <div className="lg:ml-32">
                 <button
                   onClick={randomHadith}
                   className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer text-xl hover:text-2xl"
@@ -222,7 +222,7 @@ const HadithLoader = ({ data, randomHadith }) => {
                 </button>
               </div>
             ) : selectedLanguage === "Urdu" ? (
-              <div className="ml-32">
+              <div className="lg:ml-32">
                 <button
                   onClick={randomHadith}
                   className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer text-xl hover:text-2xl"
@@ -283,7 +283,7 @@ const HadithLoader = ({ data, randomHadith }) => {
               </div>
             ) : null}
           </div>
-          <div className="flex justify-center lg:mr-36 my-2 w-full">
+          <div className=" lg:ml-20 flex justify-center lg:mr-36 my-2 w-full">
             <h6 className="text-base lg:text-xl italic px-2 text-center">
               Chapter {data?.foundChapter_number}:
             </h6>
@@ -304,10 +304,19 @@ const HadithLoader = ({ data, randomHadith }) => {
           {data?.text ? (
             textBody()
           ) : (
-            <div className="bg-gray-300 rounded animate-pulse w-full">
-              <div className="h-12 bg-gray-400 w-2/3 my-2"></div>
-              <div className="h-32 bg-gray-400  my-2"></div>
-              <div className="h-8 bg-gray-400 w-1/3 my-2"></div>
+            <div>
+              <div className="bg-gray-300 flex flex-row justify-center rounded animate-pulse w-full">
+                <div className="h-full bg-gray-400 w-1/3">
+                  <div className="h-12 bg-gray-400 w-2/3 my-2"></div>
+                  <div className="h-32 bg-gray-400  my-2"></div>
+                </div>
+                <div className=" justify-end h-full bg-slate-700 w-2/3">
+                  <Lottie
+                    className=" lg:ml-40 h-96 w-96 "
+                    animationData={hadithIcon}
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>

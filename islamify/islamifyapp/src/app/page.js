@@ -2,6 +2,8 @@
 import Image from "next/image";
 import HadithLoader from "./components/HadithLoader";
 import { useEffect, useState, useRef } from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 let colors = [
   `bg-gray-300`,
@@ -55,7 +57,10 @@ export default function Home() {
   const [colorIndex, setColorIndex] = useState(0);
 
   useEffect(() => {
-    getRandomHadith();
+    const timer = setTimeout(() => {
+      getRandomHadith();
+    }, 4000);
+    return () => clearTimeout(timer);
   }, []);
 
   const randomIndex = () => {
@@ -82,7 +87,9 @@ export default function Home() {
   return (
     <main className={`flex justify-center items-center h-screen bg-slate-900 `}>
       <div className="w-full p-8">
+        <Header />
         <HadithLoader data={data} randomHadith={getRandomHadith} />
+        <Footer />
       </div>
     </main>
   );
