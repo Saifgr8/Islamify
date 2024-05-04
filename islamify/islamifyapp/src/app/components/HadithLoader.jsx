@@ -2,13 +2,14 @@
 import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import Lottie from "lottie-react";
-import { MdCommentBank } from "react-icons/md";
 import bookAnim from "../assets/book.json";
-import hadithIcon from "../assets/hadithSA.json";
+import hadithIcon from "../assets/FinalMainLoader.json"
+import gradeMissing from '../assets/gradeMissing.json'
 
 const HadithLoader = ({ data, randomHadith }) => {
   const [showGrades, setShowGrades] = useState(true);
   console.log(data);
+
 
   //console.log(isHovered);
   //console.log(data);
@@ -32,37 +33,49 @@ const HadithLoader = ({ data, randomHadith }) => {
 
   const languageSelection = () => {
     return (
-      <div className="flex  justify-center items-center">
+      <div className="flex  justify-center items-center mt-4">
         <div className="mx-2">
           <input
+            className="appearance-none  lg:w-3 lg:h-3 w-2 h-2 rounded-full bg-white focus:ring-yellow-600 ring-2 ring-offset-2 ring-offset-white checked:bg-yellow-600 checked:ring-yellow-600 mr-1"
             onChange={() => setSelectedLanguage("Arabic")}
             checked={selectedLanguage === "Arabic"}
             type="radio"
             id="arabic"
           />
-          <label className="px-3  font-semibold text-3xl" htmlFor="arabic">
+          <label
+            className="lg:px-3 text-lg font-semibold lg:text-3xl px-1"
+            htmlFor="arabic"
+          >
             عربي
           </label>
         </div>
         <div className="mx-2">
           <input
+            className="appearance-none  lg:w-3 lg:h-3 w-2 h-2 rounded-full bg-white focus:ring-yellow-600 ring-2 ring-offset-2 ring-offset-white checked:bg-yellow-600 checked:ring-yellow-600 mr-1"
             onChange={() => setSelectedLanguage("English")}
             checked={selectedLanguage === "English"}
             type="radio"
             id="english"
           />
-          <label className="px-3 font-semibold text-3xl" htmlFor="english">
+          <label
+            className="lg:px-3 text-lg font-semibold lg:text-3xl px-1"
+            htmlFor="english"
+          >
             English
           </label>
         </div>
         <div className="mx-2">
           <input
+            className="appearance-none  lg:w-3 lg:h-3 w-2 h-2 rounded-full bg-white focus:ring-yellow-600 ring-2 ring-offset-2 ring-offset-white checked:bg-yellow-600 checked:ring-yellow-600 mr-1"
             onChange={() => setSelectedLanguage("Urdu")}
             checked={selectedLanguage === "Urdu"}
             type="radio"
             id="urdu"
           />
-          <label className="px-3 font-semibold text-3xl" htmlFor="urdu">
+          <label
+            className="lg:px-3 text-lg font-semibold lg:text-3xl px-1"
+            htmlFor="urdu"
+          >
             اردو
           </label>
         </div>
@@ -72,14 +85,16 @@ const HadithLoader = ({ data, randomHadith }) => {
 
   const gradeSection = () => {
     return (
-      <div className="m-4">
+      <div className="lg:m-4 my-3 lg:w-full ">
         {gradesData?.length > 0 ? (
           <div className="mx-2">
             <span
               onClick={() => setShowGrades(!showGrades)}
-              className="font-semibold text-2xl"
+              className="font-semibold text-sm lg:text-2xl"
             >
-              Grades<span className="text-sm">(authenticity)</span>:
+              <div className="lg:ml-4 flex flex-col lg:flex-row justify-left items-center">
+                Grades<span className="text-xs">(authenticity)</span>
+              </div>
             </span>
             {showGrades && (
               <div className="flex flex-col">
@@ -89,20 +104,22 @@ const HadithLoader = ({ data, randomHadith }) => {
                     const finalGrade = grade[0];
                     return (
                       <div key={index}>
-                        <ol className={`list-disc m-2 p-2`}>
-                          <li className="bg-gradient-to-r from-inherit via-slate-500 to-amber-600 p-2 rounded-r-2xl shadow-md shadow-yellow-600">
-                            <span className="font-serif font-bold text-xl">
+                        <ol className={`list-disc lg:m-2 lg:p-2 my-1 py-1`}>
+                          <li className="bg-gradient-to-r from-inherit via-slate-400 to-amber-500 p-2 rounded-r-2xl shadow-lg shadow-yellow-600 w-fit">
+                            <span className="font-serif font-bold text-xs lg:text-xl">
                               {finalGrade}
                             </span>
-                            <span className="text-xl">({item.name})</span>
+                            <span className="text-xs lg:text-xl">
+                              ({item.name})
+                            </span>
                           </li>
                         </ol>
                       </div>
                     );
                   })}
                 </div>
-                <span className="border-2 bg-white my-2"></span>
-                <div className="flex flex-col gap-2 overflow-y-scroll h-64 bg-white text-black m-2 p-2 rounded-xl text-xl">
+                <span className="border-2 bg-white lg:my-2 my-1"></span>
+                <div className="flex flex-col gap-2 overflow-y-scroll h-64 bg-white text-black lg:m-2 p-2 rounded-xl  text-sm lg:text-xl">
                   {selectedLanguage === "English" ? (
                     <>
                       <span>
@@ -178,7 +195,10 @@ const HadithLoader = ({ data, randomHadith }) => {
             )}
           </div>
         ) : (
-          <span className="m-2 p-2">No grades available for this Hadith</span>
+          <div className="m-2 p-2 flex flex-col justify-center items-center">
+            <Lottie className=" h-40 w-40 lg:h-96 lg:w-96" animationData={gradeMissing} />
+            <span className="text-xs lg:text-xl ">No grades available for this Hadith</span>
+          </div>
         )}
       </div>
     );
@@ -187,9 +207,9 @@ const HadithLoader = ({ data, randomHadith }) => {
   const textBody = () => {
     return (
       <div className=" flex rounded-3xl shadow-xl shadow-amber-500 bg-gradient-to-b from-slate-800 via-slate-700 to-slate-600 text-white w-full">
-        <div className="w-1/4">{gradeSection()}</div>
+        <div className="lg:w-1/4 w-28">{gradeSection()}</div>
         <div className=" flex flex-col items-center justify-center w-3/4">
-          <div className="flex justify-start items-center">
+          <div className="flex justify-center items-center ">
             <Lottie
               loop={false}
               autoPlay={false}
@@ -197,49 +217,53 @@ const HadithLoader = ({ data, randomHadith }) => {
               className="lg:h-40 lg:w-40 h-20 w-20"
               animationData={bookAnim}
             />{" "}
-            <span className="font-serif text-2xl lg:text-4xl">
-              {data?.foundBook_name}
-            </span>
-            <span className="text-sm font-serif  lg:text-lg px-2">
-              [{data?.book_ref?.book_hadith_number}]
-            </span>
-            {selectedLanguage === "English" ? (
-              <div className="absolute right-10">
-                <button
-                  onClick={randomHadith}
-                  className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer text-xl hover:text-2xl"
-                >
-                  Random
-                </button>
-              </div>
-            ) : selectedLanguage === "Arabic" ? (
-              <div className="lg:ml-32">
-                <button
-                  onClick={randomHadith}
-                  className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer text-xl hover:text-2xl"
-                >
-                  عشوائي
-                </button>
-              </div>
-            ) : selectedLanguage === "Urdu" ? (
-              <div className="lg:ml-32">
-                <button
-                  onClick={randomHadith}
-                  className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer text-xl hover:text-2xl"
-                >
-                  بے ترتیب
-                </button>
-              </div>
-            ) : null}
+            <div className=" lg:w-full w-2/3">
+              <span className="font-serif text-lg lg:text-4xl">
+                {data?.foundBook_name}
+              </span>
+              <span className="text-sm font-serif  lg:text-lg pl-1">
+                [{data?.book_ref?.book_hadith_number}]
+              </span>
+            </div>
+            <div className=" lg:w-1/12 w-2/3 lg:flex lg:justify-center lg:items-center">
+              {selectedLanguage === "English" ? (
+                <div className="lg:absolute right-10">
+                  <button
+                    onClick={randomHadith}
+                    className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500   lg:m-2 py-2 lg:px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer lg:text-2xl  text-xs px-4  transform transition-transform duration-75 ease-in-out active:scale-95 "
+                  >
+                    Random
+                  </button>
+                </div>
+              ) : selectedLanguage === "Arabic" ? (
+                <div className="lg:absolute right-10">
+                  <button
+                    onClick={randomHadith}
+                    className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 lg:px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer lg:text-2xl  text-xs px-4  transform transition-transform duration-75 ease-in-out active:scale-95"
+                  >
+                    عشوائي
+                  </button>
+                </div>
+              ) : selectedLanguage === "Urdu" ? (
+                <div className="lg:absolute right-10">
+                  <button
+                    onClick={randomHadith}
+                    className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 lg:px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer lg:text-2xl  text-sm px-2  transform transition-transform duration-75 ease-in-out active:scale-95 "
+                  >
+                    بے ترتیب
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
           <div>{languageSelection()}</div>
           <div className="m-2 p-2 w-11/12">
             {selectedLanguage === "English" ? (
               <div className="overflow-y-scroll mb-4 pr-2 h-80">
-                <h1 className=" text-3xl lg:text-5xl py-8 text-left">
+                <h1 className=" text-xl lg:text-5xl py-8 text-left">
                   {data?.text?.english ? (
                     <div className="flex flex-col">
-                      <span className="text-xl text-blue-300 py-3">
+                      <span className="lg:text-xl text-base text-blue-300 py-3">
                         {narratorText}
                       </span>
                       {hadithText + "."}
@@ -255,7 +279,7 @@ const HadithLoader = ({ data, randomHadith }) => {
               </div>
             ) : selectedLanguage === "Arabic" ? (
               <div className="overflow-auto pr-2 mb-4 h-80">
-                <h1 className=" text-3xl lg:text-5xl text-right py-8">
+                <h1 className=" text-xl lg:text-5xl text-right py-8">
                   {data?.text?.arabic ? (
                     data?.text?.arabic
                   ) : data?.text?.arabic === "" ? (
@@ -269,7 +293,7 @@ const HadithLoader = ({ data, randomHadith }) => {
               </div>
             ) : selectedLanguage === "Urdu" ? (
               <div className="overflow-auto pr-3 mb-4 h-80">
-                <h1 className=" text-3xl lg:text-5xl text-right py-8">
+                <h1 className=" text-xl lg:text-5xl text-right py-8">
                   {data?.text?.urdu ? (
                     data?.text?.urdu
                   ) : data?.text?.urdu === "" ? (
@@ -283,13 +307,15 @@ const HadithLoader = ({ data, randomHadith }) => {
               </div>
             ) : null}
           </div>
-          <div className=" lg:ml-20 flex justify-center lg:mr-36 my-2 w-full">
-            <h6 className="text-base lg:text-xl italic px-2 text-center">
+          <div className=" flex justify-center m-2 lg:w-full h-10 w-52 overflow-auto">
+            <h6 className="text-sm lg:text-xl italic pr-2 text-center font-bold">
               Chapter {data?.foundChapter_number}:
             </h6>
-            <h6 className="text-base lg:text-xl italic text-center">
-              {data?.foundChapter_name} - [
-              {data?.chapter_ref?.chapter_hadith_number}]
+            <h6 className="text-sm lg:text-xl italic text-left ">
+              {data?.foundChapter_name}
+              <span className="text-xs">
+                [{data?.chapter_ref?.chapter_hadith_number}]
+              </span>
             </h6>
           </div>
         </div>
@@ -305,14 +331,14 @@ const HadithLoader = ({ data, randomHadith }) => {
             textBody()
           ) : (
             <div>
-              <div className="bg-gray-300 flex flex-row justify-center rounded animate-pulse w-full">
+              <div className="bg-gray-300 flex flex-row justify-center rounded animate-none w-full">
                 <div className="h-full bg-gray-400 w-1/3">
                   <div className="h-12 bg-gray-400 w-2/3 my-2"></div>
                   <div className="h-32 bg-gray-400  my-2"></div>
                 </div>
                 <div className=" justify-end h-full bg-slate-700 w-2/3">
                   <Lottie
-                    className=" lg:ml-40 h-96 w-96 "
+                    className=" lg:ml-32 "
                     animationData={hadithIcon}
                   />
                 </div>
