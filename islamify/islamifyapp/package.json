@@ -10,6 +10,7 @@
     "run-script": "node script.js"
   },
   "dependencies": {
+    "@google-cloud/translate": "^8.2.0",
     "daisyui": "^4.10.5",
     "flowbite": "^2.3.0",
     "lottie-react": "^2.4.0",

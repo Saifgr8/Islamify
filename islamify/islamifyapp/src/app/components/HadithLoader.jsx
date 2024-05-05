@@ -4,17 +4,21 @@ import { useState, useRef } from "react";
 import Lottie from "lottie-react";
 import bookAnim from "../assets/book.json";
 import hadithIcon from "../assets/FinalMainLoader.json";
-import gradeMissing from "../assets/gradeMissing.json";
 import exclamationAnim from "../assets/exclamation.json";
 import { FaChevronLeft } from "react-icons/fa6";
 import { FaChevronRight } from "react-icons/fa6";
+import { MdReport } from "react-icons/md";
+
+//import { translateText } from "../lib/translate";
+import Modal from "../pages/modal/page";
 
 const HadithLoader = ({ data, randomHadith }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(true);
   const [hadithArray, setHadithArray] = useState([]);
-  console.log('main arr', hadithArray)
-  const [hadithPlay, setHadithPlay] = useState([hadithArray[1]]);
-  console.log("final array is", hadithPlay);
-  let finalData = hadithArray[hadithArray?.length - 1];
+  const [hadithPlay, setHadithPlay] = useState(null);
+  const hadithIndex = hadithArray.findIndex(
+    (item) => item?._id === hadithPlay?._id
+  );
 
   const updateQueue = (newData) => {
     const dataArr = [...hadithArray];
@@ -30,6 +34,11 @@ const HadithLoader = ({ data, randomHadith }) => {
       updateQueue(data);
     }
   }, [data]);
+
+  useEffect(() => {
+    setHadithPlay(hadithArray[hadithArray.length - 1]);
+  }, [hadithArray]);
+
   const ref = useRef(null);
 
   useEffect(() => {
@@ -41,21 +50,23 @@ const HadithLoader = ({ data, randomHadith }) => {
     return () => clearTimeout(time);
   }, [data]);
 
-  const narratorIndex = finalData?.text?.english.indexOf(":");
-  const narratorText = finalData?.text?.english.substr(0, narratorIndex + 1);
-  const hadithText = finalData?.text?.english.substr(narratorIndex + 1);
-  const gradesData = finalData?.grades;
-  console.log(gradesData);
+  const narratorIndex = hadithPlay?.text?.english.indexOf(":");
+  const narratorText = hadithPlay?.text?.english.substr(0, narratorIndex + 1);
+  const hadithText = hadithPlay?.text?.english.substr(narratorIndex + 1);
+  const gradesData = hadithPlay?.grades;
+  //console.log(gradesData);
 
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-  console.log(selectedLanguage);
+  //console.log(selectedLanguage);
 
-  const handlePrevClick = () => {
-    setHadithPlay(hadithArray[0]);
+  const handlePrevClick = (event) => {
+    if (hadithArray[0] && hadithArray[0].length === 0) {
+      event.preventDefault();
+    } else {
+      setHadithPlay(hadithArray[0]);
+    }
   };
-  const handleCurrentClick = () => {
-    setHadithPlay(hadithArray[1]);
-  };
+
   const languageSelection = () => {
     return (
       <div className="flex  justify-center items-center mt-4">
@@ -135,7 +146,7 @@ const HadithLoader = ({ data, randomHadith }) => {
                   <div className="flex-shrink-0" key={index}>
                     <div className="flex flex-row justify-center items-center">
                       <span className="lg:text-xl text-base whitespace-nowrap py-1.5 px-2 ">
-                        <div className="hover:shadow-yellow-400 hover:shadow-xl px-2 bg-gradient-to-br from-inherit via-slate-500 to-yellow-500 rounded-lg shadow-md shadow-white">
+                        <div className=" px-2 bg-gradient-to-br from-inherit via-slate-500 to-yellow-500 rounded-lg shadow-md shadow-white">
                           <span className="font-serif">{finalGrade} </span>(
                           {item.name} )
                         </div>
@@ -157,6 +168,13 @@ const HadithLoader = ({ data, randomHadith }) => {
     );
   };
 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   const textBody = () => {
     return (
       <div className=" flex  rounded-3xl shadow-xl shadow-amber-500 bg-gradient-to-b from-slate-800 via-slate-700 to-slate-600 text-white w-full">
@@ -171,132 +189,115 @@ const HadithLoader = ({ data, randomHadith }) => {
             />{" "}
             <div className="w-full">
               <span className="font-serif text-lg lg:text-4xl">
-                {finalData?.foundBook_name}
+                {hadithPlay?.foundBook_name}
               </span>
               <span className="text-sm font-serif  lg:text-lg pl-1">
-                [{finalData?.book_ref?.book_hadith_number}]
+                [{hadithPlay?.book_ref?.book_hadith_number}]
               </span>
-            </div>
-            <div className=" lg:w-1/12 w-1/3 lg:flex lg:justify-center lg:items-center">
-              {selectedLanguage === "English" ? (
-                <div className="lg:absolute right-10">
-                  <button
-                    onClick={randomHadith}
-                    className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500   lg:m-2 py-2 lg:px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer lg:text-2xl  text-xs px-4  transform transition-transform duration-75 ease-in-out active:scale-95 "
-                  >
-                    Random
-                  </button>
-                </div>
-              ) : selectedLanguage === "Arabic" ? (
-                <div className="lg:absolute right-10">
-                  <button
-                    onClick={randomHadith}
-                    className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 lg:px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer lg:text-2xl  text-xs px-4  transform transition-transform duration-75 ease-in-out active:scale-95"
-                  >
-                    عشوائي
-                  </button>
-                </div>
-              ) : selectedLanguage === "Urdu" ? (
-                <div className="lg:absolute right-10">
-                  <button
-                    onClick={randomHadith}
-                    className="bg-gradient-to-r from-inherit via-amber-200 to-amber-500  m-2 py-2 lg:px-6 rounded-xl shadow-xl text-black shadow-yellow-600 cursor-pointer lg:text-2xl  text-sm px-2  transform transition-transform duration-75 ease-in-out active:scale-95 "
-                  >
-                    بےترتیب
-                  </button>
-                </div>
-              ) : null}
             </div>
           </div>
           <div>{languageSelection()}</div>
-          <div className="m-2 p-2 w-11/12">
-            {selectedLanguage === "English" ? (
-              <div className="overflow-y-scroll mb-4 pr-2 h-80 lg:h-56">
-                <h1 className=" text-xl lg:text-4xl text-left">
-                  {finalData?.text?.english ? (
-                    <div className="flex flex-col">
-                      <span className="lg:text-xl text-base text-blue-300 py-3">
-                        {narratorText}
-                      </span>
-                      {hadithText + "."}
-                    </div>
-                  ) : finalData?.text?.english === "" ? (
-                    <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-gray-200">
-                      Translation unavailable, please look other languages.
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                </h1>
-              </div>
-            ) : selectedLanguage === "Arabic" ? (
-              <div className="overflow-y-scroll mb-4 pr-2 h-80 lg:h-56">
-                <h1 className=" text-xl lg:text-4xl text-right py-8">
-                  {finalData?.text?.arabic ? (
-                    finalData?.text?.arabic
-                  ) : finalData?.text?.arabic === "" ? (
-                    <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-gray-400">
-                      الترجمة غير متوفرة، يرجى البحث في لغات أخرى
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                </h1>
-              </div>
-            ) : selectedLanguage === "Urdu" ? (
-              <div className="overflow-y-scroll mb-4 pr-2 h-80 lg:h-56">
-                <h1 className=" text-xl lg:text-4xl text-right py-8">
-                  {finalData?.text?.urdu ? (
-                    finalData?.text?.urdu
-                  ) : finalData?.text?.urdu === "" ? (
-                    <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-gray-400">
-                      ترجمہ دستیاب نہیں ہے، براہ کرم دیگر زبانیں دیکھیں۔
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                </h1>
-              </div>
-            ) : null}
-          </div>
-          <div className=" flex flex-col justify-center items-center m-2 lg:w-full h-full w-full">
-            <div className="flex mb-4 gap-3 ">
+
+          <div className="flex flex-row w-full justify-center items-center">
+            <div className="lg:w-1/12">
               <FaChevronLeft
                 onClick={handlePrevClick}
-                className="cursor-pointer lg:h-6 lg:w-6 "
-                style={{ color: "gold" }}
-              />
-
-              <FaChevronRight
-                onClick={handleCurrentClick}
-                className=" cursor-pointer lg:h-6 lg:w-6"
-                style={{ color: "gold" }}
+                className={`cursor-pointer lg:h-24 lg:w-24 h-12 w-12 ${
+                  hadithArray[0]?.length === 0
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
+                } ${
+                  hadithIndex === 1 && hadithArray[0]?.length !== 0
+                    ? "animate-pulse"
+                    : ""
+                }`}
+                style={{
+                  color: "goldenrod",
+                }}
               />
             </div>
+            <div className="m-2 p-2 lg:w-11/12">
+              {selectedLanguage === "English" ? (
+                <div className="overflow-y-scroll mb-4 pr-2 h-80 lg:h-56">
+                  <h1 className=" text-xl lg:text-4xl text-left pl-2">
+                    {hadithPlay?.text?.english ? (
+                      <div className="flex flex-col">
+                        <span className="lg:text-xl text-base text-blue-300 py-3">
+                          {narratorText}
+                        </span>
+                        {hadithText + "."}
+                      </div>
+                    ) : hadithPlay?.text?.english === "" ? (
+                      <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-gray-200">
+                        Translation unavailable, please look other languages.
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </h1>
+                </div>
+              ) : selectedLanguage === "Arabic" ? (
+                <div className="overflow-y-scroll mb-4 pr-2 h-80 lg:h-56">
+                  <h1 className=" text-xl lg:text-4xl text-right py-8 pr-2">
+                    {hadithPlay?.text?.arabic ? (
+                      hadithPlay?.text?.arabic
+                    ) : hadithPlay?.text?.arabic === "" ? (
+                      <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-gray-400">
+                        الترجمة غير متوفرة، يرجى البحث في لغات أخرى
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </h1>
+                </div>
+              ) : selectedLanguage === "Urdu" ? (
+                <div className="overflow-y-scroll mb-4 pr-2 h-80 lg:h-56">
+                  <h1 className=" text-xl lg:text-4xl text-right py-8 pr-2">
+                    {hadithPlay?.text?.urdu ? (
+                      hadithPlay?.text?.urdu
+                    ) : hadithPlay?.text?.urdu === "" ? (
+                      <span className=" text-2xl lg:text-4xl text-center font-thin p-2 text-gray-400">
+                        ترجمہ دستیاب نہیں ہے، براہ کرم دیگر زبانیں دیکھیں۔
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </h1>
+                </div>
+              ) : null}
+            </div>
+            <div className=" lg:w-1/12">
+              <FaChevronRight
+                style={{ color: "goldenrod" }}
+                onClick={randomHadith}
+                className={`cursor-pointer lg:h-24 lg:w-24 h-12 w-12 ${
+                  hadithIndex === 0 || hadithArray[0].length === 0
+                    ? "animate-pulse"
+                    : ""
+                }`}
+              />
+            </div>
+          </div>
+
+          <div className=" flex flex-col justify-center items-center m-2 lg:w-full h-full w-full">
             <div className=" flex flex-row justify-center items-center">
               <h6 className="text-sm lg:text-xl italic pr-2 text-center font-bold">
-                Chapter {finalData?.foundChapter_number}:
+                Chapter {hadithPlay?.foundChapter_number}:
               </h6>
               <h6 className="text-sm lg:text-xl italic text-left ">
-                {finalData?.foundChapter_name}
+                {hadithPlay?.foundChapter_name}
                 <span className="text-xs">
-                  [{finalData?.chapter_ref?.chapter_hadith_number}]
+                  [{hadithPlay?.chapter_ref?.chapter_hadith_number}]
                 </span>
               </h6>
             </div>
             <div className="justify-start flex w-full overflow-auto">
               <div className="flex flex-row justify-around w-full items-center">
                 <div className="w-3/4">{gradeSection()}</div>
-                <div className="flex flex-row items-center justify-center lg:mr-8 ">
-                  <Lottie
-                    loop={false}
-                    autoplay={true}
-                    className=" absolute w-40 cursor-pointer mb-5"
-                    animationData={gradeMissing}
-                  />
-                  <span className="text-sm lg:text-lg lg:mt-8 mt-3 cursor-pointer">
+                <div onClick={openModal}
+                className="flex flex-col items-center justify-center lg:mr-8 cursor-pointer">
+                  <MdReport className="lg:h-8 lg:w-8 h-6 w-6" style={{color: 'red'}} />
                     Report
-                  </span>
                 </div>
               </div>
             </div>
@@ -308,8 +309,8 @@ const HadithLoader = ({ data, randomHadith }) => {
 
   return (
     <>
-      <div className="">
-        {finalData?.text ? (
+      <div className="flex justify-center items-center">
+        {hadithPlay?.text ? (
           textBody()
         ) : (
           <div>
@@ -324,6 +325,7 @@ const HadithLoader = ({ data, randomHadith }) => {
           </div>
         )}
       </div>
+      <div>{modalIsOpen && <Modal onClose={closeModal} data={hadithPlay}/>}</div>
     </>
   );
 };
