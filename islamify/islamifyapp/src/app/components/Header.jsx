@@ -5,7 +5,7 @@ import Lottie from "lottie-react";
 const Header = () => {
   return (
     <div className=" flex flex-col lg:flex-row justify-center items-center mt-12">
-      <div className="absolute top-4 flex flex-col lg:flex-row lg:items-end lg:justify-center">
+      <div className="absolute top-0 flex flex-col lg:flex-row lg:items-end lg:justify-center">
         <div className="flex  lg:flex-row flex-col justify-center  items-center">
           <div className="flex flex-row justify-center items-center">
             <Lottie

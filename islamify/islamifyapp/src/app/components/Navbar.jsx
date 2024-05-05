@@ -27,8 +27,8 @@ const Navbar = () => {
     <div
       className={`transition-colors duration-1000 h-screen ${
         menuOpen
-          ? "bg-gradient-to-br from-slate-900 via-slate-700 to-slate-600 w-full"
-          : "bg-inherit"
+          ? " bg-gradient-to-br from-slate-900 via-slate-700 to-slate-600 w-full"
+          : " bg-inherit "
       }`}
     >
       <BurgerMenu

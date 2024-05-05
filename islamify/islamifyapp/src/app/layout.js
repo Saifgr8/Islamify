@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="">
-          <div className=" lg:w-1/5 absolute left-0 z-10">
+          <div className=" lg:w-1/5 absolute left-0">
             <Navbar />
           </div>
           <div className="">{children}</div>
