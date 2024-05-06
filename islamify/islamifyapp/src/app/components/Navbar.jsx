@@ -48,6 +48,12 @@ const Navbar = () => {
                 Home
               </li>
             </Link>
+            <li className="text-yellow-300 cursor-pointer m-2 p-2  font-semibold  text-lg hover:bg-gradient-to-r from-slate-700 via-amber-500 to-amber-400 rounded-lg ">
+              Profile
+              <span className=" mx-2 badge badge-ghost animate-pulse">
+                soon
+              </span>
+            </li>
             <li
               onClick={() => setShowHadithBooks(!showHadithBooks)}
               className={`cursor-pointer m-2 p-2 text-white font-semibold text-lg hover:bg-gradient-to-r from-slate-700 via-amber-500 to-amber-400 rounded-lg`}

@@ -301,10 +301,12 @@ const HadithLoader = ({ data, randomHadith }) => {
           <div>{languageSelection()}</div>
 
           <div className="flex flex-row w-full justify-center items-center">
-            <div className="lg:w-1/12">
+            <div
+              className={`lg:w-1/12 ${NavState === false ? "z-50" : "-z-10"} `}
+            >
               <FaChevronLeft
                 onClick={handlePrevClick}
-                className={`lg:h-24 lg:w-24 h-12 w-12 ${
+                className={`cursor-pointer lg:h-24 lg:w-24 h-12 w-12 ${
                   hadithArray[0]?.length === 0 ? "hidden" : ""
                 } ${
                   hadithIndex === 1 && hadithArray[0]?.length !== 0

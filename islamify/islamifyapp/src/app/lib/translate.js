@@ -2,7 +2,7 @@
 
 
 // export const translateText = async (text, targetLang) =>  {
-//     const url = `https://translation.googleapis.com/language/translate/v2?key=AIzaSyCRFnhI0LT8dl_DoJa5m1bNUXjQBQomwhs`;
+//     const url = `https://translation.googleapis.com/language/translate/v2?key=`;
 //     try {
 //         const res = await fetch(url, {
 //             method: 'POST',
