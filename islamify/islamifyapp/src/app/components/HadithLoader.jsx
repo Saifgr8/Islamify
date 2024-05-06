@@ -4,21 +4,27 @@ import { useState, useRef } from "react";
 import Lottie from "lottie-react";
 import bookAnim from "../assets/book.json";
 import hadithIcon from "../assets/FinalMainLoader.json";
-import exclamationAnim from "../assets/exclamation.json";
 import { FaChevronLeft } from "react-icons/fa6";
 import { FaChevronRight } from "react-icons/fa6";
 import { MdReport } from "react-icons/md";
+import { MdOutlineQuestionMark } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 //import { translateText } from "../lib/translate";
-import Modal from "../pages/modal/page";
+import Modal from "../components/Modal";
 
 const HadithLoader = ({ data, randomHadith }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+  const [showGradeDetails, setShowGradeDetail] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [hadithArray, setHadithArray] = useState([]);
+  console.log(hadithArray[0]?.length);
   const [hadithPlay, setHadithPlay] = useState(null);
   const hadithIndex = hadithArray.findIndex(
     (item) => item?._id === hadithPlay?._id
   );
+
+  const NavState = useSelector((store) => store?.NavBarOpen?.isNavBarOpen);
+  console.log(NavState);
 
   const updateQueue = (newData) => {
     const dataArr = [...hadithArray];
@@ -122,47 +128,143 @@ const HadithLoader = ({ data, randomHadith }) => {
   const gradeSection = () => {
     return (
       <div className="lg:m-4 my-3 lg:w-full">
-        <div className="lg:ml-4 flex text-lg flex-row justify-start items-center mx-2">
-          <div className="flex items-center justify-start lg:justify-center ">
-            <span className="font-bold text-base lg:text-xl">Grades</span>
-
-            <Lottie
-              className=" inline-block lg:h-10 lg:w-10 h-6 w-6 cursor-pointer"
-              animationData={exclamationAnim}
-            />
-          </div>
-          {gradesData?.length > 0 ? (
-            <div className="flex flex-row overflow-x-auto max-w-full h-10">
-              {gradesData.map((item, index) => {
-                const grade = item.grade.split(" ");
-                const finalGrade = grade.includes("Daif")
-                  ? "Daif"
-                  : grade.includes("Sahih")
-                  ? "Sahih"
-                  : grade.includes("Hasan")
-                  ? "Hasan"
-                  : "";
-                return (
-                  <div className="flex-shrink-0" key={index}>
-                    <div className="flex flex-row justify-center items-center">
-                      <span className="lg:text-xl text-base whitespace-nowrap py-1.5 px-2 ">
-                        <div className=" px-2 bg-gradient-to-br from-inherit via-slate-500 to-yellow-500 rounded-lg shadow-md shadow-white">
-                          <span className="font-serif">{finalGrade} </span>(
-                          {item.name} )
-                        </div>
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className=" flex justify-center items-center">
-              <span className="text-xs lg:text-xl">
-                No grades available for this Hadith.
-              </span>
+        <div className="lg:ml-4 flex text-lg overflow-auto flex-col h-full justify-start items-start mx-2">
+          {showGradeDetails && (
+            <div className="max-h-16 overflow-y-scroll w-full rounded-lg bg-white text-black flex flex-col ">
+              {selectedLanguage === "English" ? (
+                <div className="text-left flex flex-col pl-1 text-sm lg:text-xl">
+                  <span>
+                    <span className="font-bold font-serif text-base lg:text-2xl">
+                      Ṣaḥīḥ
+                    </span>
+                    : Hadith transmitted by narrators of sound character and
+                    memory, forming an unbroken chain. It must not conflict with
+                    more reliable reports and should be free from hidden
+                    defects.
+                  </span>
+                  <span>
+                    <span className="font-bold font-serif text-base lg:text-2xl">
+                      Ḥasan
+                    </span>
+                    : Hadith transmitted by narrators of sound character but
+                    weak memory, with an unbroken chain. It should not
+                    contradict more reliable reports and must be free from
+                    hidden defects.
+                  </span>
+                  <span>
+                    <span className="font-bold font-serif  text-base  lg:text-2xl">
+                      Ḍaʻīf
+                    </span>
+                    : Hadith lacking the elements to qualify as Ḥasan, such as
+                    narrators with weak memory or character, hidden defects, or
+                    a broken chain of narrators.
+                  </span>
+                </div>
+              ) : selectedLanguage === "Urdu" ? (
+                <div className="text-right flex flex-col pr-1 text-sm lg:text-xl">
+                  <span>
+                    <span className="font-bold font-serif  text-base lg:text-2xl">
+                      صحیح
+                    </span>
+                    : حدیث جو صحیح خصوصیات اور یاداشت کے ناقلین کے ذریعہ منتقل
+                    ہوتی ہے، بغیر رکاوٹ کے زنجیر بناتی ہے۔ یہ زیادہ قابل اعتماد
+                    رپورٹ کے ساتھ تضاد نہیں کرنی چاہئے اور اسے پوشیدہ عیبوں سے
+                    آزاد ہونا چاہئے۔
+                  </span>
+                  <span>
+                    <span className="font-bold font-serif text-base  lg:text-2xl">
+                      حسن
+                    </span>
+                    : حدیث جو صحیح خصوصیات رکھنے والے ناقلین کے ذریعہ بغیر رکاوٹ
+                    کی زنجیر کے ساتھ، لیکن کمزور یاداشت کے ساتھ منتقل ہوتی ہے۔
+                    اسے زیادہ قابل اعتماد رپورٹ کے ساتھ تضاد نہیں کرنی چاہئے اور
+                    اسے پوشیدہ عیبوں سے آزاد ہونا چاہئے۔
+                  </span>
+                  <span>
+                    <span className="font-bold font-serif  text-base lg:text-2xl">
+                      ضعیف
+                    </span>
+                    : حدیث جو حسن کے ارکان کے طور پر معیار نہ پورا کرتی ہو، جیسے
+                    کہ ناقلین کمزور یاداشت یا خصوصیات کے ساتھ، پوشیدہ عیبوں، یا
+                    منقطع زنجیر کی وجہ سے۔
+                  </span>
+                </div>
+              ) : selectedLanguage === "Arabic" ? (
+                <div className="text-right flex flex-col pr-1 text-sm lg:text-xl">
+                  <span>
+                    <span className="font-bold font-serif text-base lg:text-2xl">
+                      صحيح
+                    </span>
+                    : الحديث الذي يتم نقله عن طريق الرواة ذوي الطابع السليم
+                    والذاكرة الجيدة، والذي يشكل سلسلة متصلة. يجب ألا يتعارض هذا
+                    الحديث مع تقارير أكثر موثوقية ويجب أن يكون خاليًا من العيوب
+                    الخفية.
+                  </span>
+                  <span>
+                    <span className="font-bold font-serif text-base lg:text-2xl">
+                      حسن
+                    </span>
+                    : الحديث الذي يتم نقله عن طريق الرواة ذوي الطابع السليم ولكن
+                    الذاكرة الضعيفة، مع سلسلة متصلة. يجب ألا يتعارض هذا الحديث
+                    مع تقارير أكثر موثوقية ويجب أن يكون خاليًا من العيوب الخفية.
+                  </span>
+                  <span>
+                    <span className="font-bold font-serif text-base lg:text-2xl">
+                      ضعيف
+                    </span>
+                    : الحديث الذي يفتقر إلى العناصر للتأهل كحديث حسن، مثل الرواة
+                    ذوي الذاكرة أو الشخصية الضعيفة، أو العيوب الخفية، أو سلسلة
+                    منقطعة من الرواة.
+                  </span>
+                </div>
+              ) : null}
             </div>
           )}
+          <div className="flex flex-row justify-start items-center">
+            <div className="flex items-center justify-start lg:justify-center ">
+              <span className="font-bold text-base lg:text-xl">Grades</span>
+
+              <MdOutlineQuestionMark
+                onClick={() => setShowGradeDetail(!showGradeDetails)}
+                className={` h-10 w-10 px-2 cursor-pointer animate-bounce ${
+                  NavState === false ? "z-20" : "-z-10"
+                }`}
+                style={{ color: "goldenrod" }}
+              />
+            </div>
+            {gradesData?.length > 0 ? (
+              <div className="flex flex-row overflow-x-auto max-w-full h-10">
+                {gradesData.map((item, index) => {
+                  const grade = item.grade.split(" ");
+                  const finalGrade = grade.includes("Daif")
+                    ? "Daif"
+                    : grade.includes("Sahih")
+                    ? "Sahih"
+                    : grade.includes("Hasan")
+                    ? "Hasan"
+                    : "";
+                  return (
+                    <div className="flex-shrink-0" key={index}>
+                      <div className="flex flex-row justify-center items-center">
+                        <span className="lg:text-xl text-base whitespace-nowrap py-1.5 px-2 ">
+                          <div className=" px-2 bg-gradient-to-br from-inherit via-slate-500 to-yellow-500 rounded-lg shadow-md shadow-white">
+                            <span className="font-serif">{finalGrade} </span>(
+                            {item.name} )
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className=" flex justify-center items-center">
+                <span className="text-xs lg:text-xl">
+                  No grades available for this Hadith.
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -202,10 +304,8 @@ const HadithLoader = ({ data, randomHadith }) => {
             <div className="lg:w-1/12">
               <FaChevronLeft
                 onClick={handlePrevClick}
-                className={`cursor-pointer lg:h-24 lg:w-24 h-12 w-12 ${
-                  hadithArray[0]?.length === 0
-                    ? "cursor-not-allowed"
-                    : "cursor-pointer"
+                className={`lg:h-24 lg:w-24 h-12 w-12 ${
+                  hadithArray[0]?.length === 0 ? "hidden" : ""
                 } ${
                   hadithIndex === 1 && hadithArray[0]?.length !== 0
                     ? "animate-pulse"
@@ -294,10 +394,15 @@ const HadithLoader = ({ data, randomHadith }) => {
             <div className="justify-start flex w-full overflow-auto">
               <div className="flex flex-row justify-around w-full items-center">
                 <div className="w-3/4">{gradeSection()}</div>
-                <div onClick={openModal}
-                className="flex flex-col items-center justify-center lg:mr-8 cursor-pointer">
-                  <MdReport className="lg:h-8 lg:w-8 h-6 w-6" style={{color: 'red'}} />
-                    Report
+                <div
+                  onClick={openModal}
+                  className="flex flex-col items-center justify-center lg:mr-8 cursor-pointer"
+                >
+                  <MdReport
+                    className="lg:h-8 lg:w-8 h-6 w-6"
+                    style={{ color: "red" }}
+                  />
+                  Report
                 </div>
               </div>
             </div>
@@ -325,7 +430,9 @@ const HadithLoader = ({ data, randomHadith }) => {
           </div>
         )}
       </div>
-      <div>{modalIsOpen && <Modal onClose={closeModal} data={hadithPlay}/>}</div>
+      <div>
+        {modalIsOpen && <Modal onClose={closeModal} data={hadithPlay} />}
+      </div>
     </>
   );
 };
