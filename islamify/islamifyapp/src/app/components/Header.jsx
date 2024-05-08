@@ -28,7 +28,7 @@ const Header = () => {
               onMouseLeave={() => setPoints("NP")}
               className="lg:pt-1 mt-4 transform transition-all delay-150 text-white hover:scale-125 lg:absolute lg:top-8 lg:right-10 flex justify-center items-center lg:px-4 px-2 rounded-md shadow-lg shadow-white bg-gradient-to-tl from-yellow-200 via-yellow-400 to-yellow-600 "
             > 
-              <span className="text-white lg:text-base text-xs">{points} ___</span>
+              <span className="text-white lg:text-base text-xs hover:font-serif">{points} ___</span>
               <Lottie animationData={coin} className="lg:h-10 lg:w-10 h-8 w-8" />
               {points && <span className="badge badge-outline animate-pulse text-sm">soon</span>}
             </div>

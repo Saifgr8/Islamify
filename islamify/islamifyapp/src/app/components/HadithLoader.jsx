@@ -17,14 +17,14 @@ const HadithLoader = ({ data, randomHadith }) => {
   const [showGradeDetails, setShowGradeDetail] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [hadithArray, setHadithArray] = useState([]);
-  console.log(hadithArray[0]?.length);
+  //console.log(hadithArray[0]?.length);
   const [hadithPlay, setHadithPlay] = useState(null);
   const hadithIndex = hadithArray.findIndex(
     (item) => item?._id === hadithPlay?._id
   );
-
+  console.log(hadithIndex);
   const NavState = useSelector((store) => store?.NavBarOpen?.isNavBarOpen);
-  console.log(NavState);
+  //console.log(NavState);
 
   const updateQueue = (newData) => {
     const dataArr = [...hadithArray];
@@ -70,6 +70,13 @@ const HadithLoader = ({ data, randomHadith }) => {
       event.preventDefault();
     } else {
       setHadithPlay(hadithArray[0]);
+    }
+  };
+  const handleNextClick = () => {
+    if (hadithIndex === 0) {
+      setHadithPlay(hadithArray[1]);
+    } else {
+      randomHadith();
     }
   };
 
@@ -371,7 +378,7 @@ const HadithLoader = ({ data, randomHadith }) => {
             <div className=" lg:w-1/12">
               <FaChevronRight
                 style={{ color: "goldenrod" }}
-                onClick={randomHadith}
+                onClick={handleNextClick}
                 className={`cursor-pointer lg:h-24 lg:w-24 h-12 w-12 ${
                   hadithIndex === 0 || hadithArray[0].length === 0
                     ? "animate-pulse"
