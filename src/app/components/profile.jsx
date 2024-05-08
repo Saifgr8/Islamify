@@ -12,14 +12,14 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("../apis/books");
+      const res = await fetch("../api/books");
       if (!res.ok) {
         console.log("Error getting data");
       }
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

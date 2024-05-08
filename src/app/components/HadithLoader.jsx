@@ -11,9 +11,9 @@ import { FaChevronRight } from "react-icons/fa6";
 
 const HadithLoader = ({ data, randomHadith }) => {
   const [hadithArray, setHadithArray] = useState([]);
-  console.log('main arr', hadithArray)
+  // console.log('main arr', hadithArray)
   const [hadithPlay, setHadithPlay] = useState([hadithArray[1]]);
-  console.log("final array is", hadithPlay);
+  // console.log("final array is", hadithPlay);
   let finalData = hadithArray[hadithArray?.length - 1];
 
   const updateQueue = (newData) => {
@@ -45,10 +45,10 @@ const HadithLoader = ({ data, randomHadith }) => {
   const narratorText = finalData?.text?.english.substr(0, narratorIndex + 1);
   const hadithText = finalData?.text?.english.substr(narratorIndex + 1);
   const gradesData = finalData?.grades;
-  console.log(gradesData);
+  // console.log(gradesData);
 
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-  console.log(selectedLanguage);
+  // console.log(selectedLanguage);
 
   const handlePrevClick = () => {
     setHadithPlay(hadithArray[0]);

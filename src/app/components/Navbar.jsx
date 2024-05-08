@@ -52,7 +52,7 @@ const Navbar = () => {
               <div className=" mx-2 badge badge-ghost">Soon</div>
               <ul>
                 {showHadithBooks && books.map((item, index) => {
-                  console.log(item)
+                  // console.log(item)
                   return (
                     <div>
                       <li className="m-1 p-1" key={index}>{item}</li>

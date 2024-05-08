@@ -70,7 +70,7 @@ export default function Home() {
 
   const getRandomHadith = async () => {
     try {
-      const res = await fetch("../apis/hadith");
+      const res = await fetch("../api/hadith");
       //console.log(res)
       if (!res.ok) {
         console.log("Error fetching hadith");
